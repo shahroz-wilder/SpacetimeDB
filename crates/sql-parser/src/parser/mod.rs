@@ -209,7 +209,10 @@ pub(crate) fn parse_proj(expr: Expr) -> SqlParseResult<ProjectExpr> {
 
 // These types determine the size of [`parse_expr`]'s stack frame.
 // Changing their sizes will require updating the recursion limit to avoid stack overflows.
+// Size assertions are only valid for 64-bit targets (pointers are smaller on wasm32).
+#[cfg(target_pointer_width = "64")]
 const _: () = assert!(size_of::<Expr>() == 168);
+#[cfg(target_pointer_width = "64")]
 const _: () = assert!(size_of::<SqlParseResult<SqlExpr>>() == 40);
 
 /// Parse a scalar expression
